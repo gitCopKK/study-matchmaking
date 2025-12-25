@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: studymatch-backend
+    runtime: docker
+    repo: https://github.com/gitCopKK/study-matchmaking
+    region: ohio  # Closest to Neon database (us-east-2)
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/profiles/options
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
