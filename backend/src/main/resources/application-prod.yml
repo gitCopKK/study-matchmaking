@@ -30,7 +30,7 @@ spring:
   
   jpa:
     hibernate:
-      ddl-auto: validate  # Use 'validate' in production, run migrations separately
+      ddl-auto: update  # Creates/updates tables automatically
     show-sql: false
     defer-datasource-initialization: false
     properties:
