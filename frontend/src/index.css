@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans antialiased;
+    @apply bg-gradient-to-br from-slate-50 via-white to-primary-50;
+    @apply dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950;
+    @apply text-slate-900 dark:text-slate-100;
+    min-height: 100vh;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100 dark:bg-slate-800;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-600 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400 dark:bg-slate-500;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-primary {
+    @apply btn bg-gradient-to-r from-primary-500 to-primary-600 text-white;
+    @apply hover:from-primary-600 hover:to-primary-700;
+    @apply focus:ring-primary-500;
+    @apply shadow-lg shadow-primary-500/25;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200;
+    @apply border border-slate-200 dark:border-slate-700;
+    @apply hover:bg-slate-50 dark:hover:bg-slate-700;
+    @apply focus:ring-slate-400;
+  }
+  
+  .btn-accent {
+    @apply btn bg-gradient-to-r from-accent-500 to-accent-600 text-white;
+    @apply hover:from-accent-600 hover:to-accent-700;
+    @apply focus:ring-accent-500;
+    @apply shadow-lg shadow-accent-500/25;
+  }
+  
+  .btn-danger {
+    @apply btn bg-danger-500 text-white;
+    @apply hover:bg-danger-600;
+    @apply focus:ring-danger-500;
+  }
+  
+  .btn-ghost {
+    @apply btn text-slate-600 dark:text-slate-300;
+    @apply hover:bg-slate-100 dark:hover:bg-slate-800;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-slate-800/80 rounded-2xl;
+    @apply border border-slate-100 dark:border-slate-700/50;
+    @apply shadow-soft backdrop-blur-sm;
+  }
+  
+  .input {
+    @apply w-full px-4 py-3 rounded-xl;
+    @apply bg-white dark:bg-slate-800;
+    @apply border border-slate-200 dark:border-slate-700;
+    @apply text-slate-900 dark:text-slate-100;
+    @apply placeholder:text-slate-400 dark:placeholder:text-slate-500;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply transition-all duration-200;
+  }
+  
+  .input-error {
+    @apply border-danger-500 focus:ring-danger-500;
+  }
+  
+  .label {
+    @apply block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5;
+  }
+  
+  .badge {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .badge-primary {
+    @apply badge bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300;
+  }
+  
+  .badge-accent {
+    @apply badge bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300;
+  }
+  
+  .badge-success {
+    @apply badge bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300;
+  }
+  
+  .badge-warning {
+    @apply badge bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300;
+  }
+  
+  .avatar {
+    @apply rounded-full bg-gradient-to-br from-primary-400 to-accent-500;
+    @apply flex items-center justify-center text-white font-semibold;
+  }
+  
+  .glass {
+    @apply bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl;
+    @apply border border-white/20 dark:border-slate-700/50;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent;
+  }
+  
+  .bg-mesh {
+    background-image: 
+      radial-gradient(at 40% 20%, rgba(14, 165, 233, 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(217, 70, 239, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(14, 165, 233, 0.1) 0px, transparent 50%),
+      radial-gradient(at 80% 50%, rgba(217, 70, 239, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(14, 165, 233, 0.1) 0px, transparent 50%);
+  }
+  
+  /* Mobile-first touch targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* Safe area padding for notched devices */
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Prevent text selection on interactive elements for mobile */
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Smooth momentum scrolling for iOS */
+  .scroll-smooth-ios {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  /* Larger touch targets on mobile */
+  .btn {
+    @apply min-h-[44px] px-4 py-3;
+  }
+  
+  /* Better input sizing on mobile */
+  .input {
+    @apply text-base min-h-[44px];
+    /* Prevent zoom on iOS */
+    font-size: 16px;
+  }
+  
+  /* Compact card padding on mobile */
+  .card {
+    @apply p-4;
+  }
+  
+  /* Smaller avatar on mobile */
+  .avatar {
+    @apply text-sm;
+  }
+}
+
+/* Landscape mobile optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+  .min-h-screen {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+}
+

@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: test-client-id
+            client-secret: test-client-secret
+
+# Use app. prefix to match main application.yml format
+app:
+  jwt:
+    # Test secret - 256-bit base64-encoded (safe for tests only)
+    secret: dGVzdC1zZWNyZXQta2V5LWZvci1qd3QtdG9rZW4tZ2VuZXJhdGlvbi1sb25n
+    expiration: 3600000
+    refresh-expiration: 86400000
+  
+  cors:
+    allowed-origins: http://localhost:5173,http://localhost:3000
+  
+  ai:
+    enabled: false
+    match-limit: 5
+    provider: groq
+    groq:
+      api-key: test-api-key
+      api-url: https://api.groq.com/openai/v1/chat/completions
+      model: test-model
+      max-tokens: 100
+      temperature: 0.7
+      skip-ssl-verification: false
+    cache:
+      ttl-minutes: 60
+

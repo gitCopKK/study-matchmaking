@@ -1,0 +1,99 @@
+# Production configuration
+# Run with: java -jar app.jar --spring.profiles.active=prod
+#
+# REQUIRED environment variables for production:
+#   - DATABASE_URL: JDBC URL for PostgreSQL
+#   - DATABASE_USERNAME: Database username
+#   - DATABASE_PASSWORD: Database password (use a strong password!)
+#   - JWT_SECRET: Base64-encoded 256-bit secret for JWT signing
+#   - CORS_ORIGINS: Comma-separated list of allowed frontend origins
+#
+# OPTIONAL environment variables:
+#   - GOOGLE_CLIENT_ID: For OAuth2 login
+#   - GOOGLE_CLIENT_SECRET: For OAuth2 login
+#   - GROQ_API_KEY: For AI-powered matching
+
+server:
+  port: ${PORT:8080}
+
+spring:
+  datasource:
+    # No default values for security - these MUST be set via environment variables
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate  # Use 'validate' in production, run migrations separately
+    show-sql: false
+    defer-datasource-initialization: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+  
+  sql:
+    init:
+      mode: never  # Don't auto-run data.sql in production
+  
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+  
+  # Google OAuth2 Configuration (optional - set environment variables to enable)
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:}
+            client-secret: ${GOOGLE_CLIENT_SECRET:}
+            scope: email, profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+
+app:
+  jwt:
+    # JWT_SECRET is REQUIRED in production - no default value
+    # Generate with: openssl rand -base64 32
+    secret: ${JWT_SECRET}
+    expiration: 86400000  # 24 hours
+    refresh-expiration: 604800000  # 7 days
+  
+  cors:
+    # CORS_ORIGINS is REQUIRED in production - no default value
+    allowed-origins: ${CORS_ORIGINS}
+  
+  ai:
+    enabled: ${AI_ENABLED:true}
+    match-limit: ${AI_MATCH_LIMIT:10}
+    provider: groq
+    groq:
+      api-key: ${GROQ_API_KEY:}
+      api-url: https://api.groq.com/openai/v1/chat/completions
+      model: llama-3.3-70b-versatile
+      max-tokens: 250
+      temperature: 0.7
+      # SSL verification MUST be enabled in production
+      skip-ssl-verification: false
+    cache:
+      ttl-minutes: 1440
+
+logging:
+  level:
+    root: WARN
+    com.studymatch: INFO
+    org.springframework.security: WARN
+

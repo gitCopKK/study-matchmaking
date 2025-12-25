@@ -1,0 +1,80 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/studymatch}
+    username: ${DATABASE_USERNAME:studymatch}
+    password: ${DATABASE_PASSWORD:studymatch123}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+  
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+  
+  # Google OAuth2 Configuration
+  # Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables to enable Google login
+  # Get credentials from: https://console.cloud.google.com/apis/credentials
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:disabled}
+            client-secret: ${GOOGLE_CLIENT_SECRET:disabled}
+            scope: email, profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+
+app:
+  jwt:
+    # IMPORTANT: Set JWT_SECRET environment variable for production (min 32 chars, base64 encoded)
+    secret: ${JWT_SECRET:c3R1ZHltYXRjaHN1cGVyc2VjcmV0a2V5Zm9yMjU2Yml0c2VjdXJpdHk=}
+    expiration: 86400000  # 24 hours in milliseconds
+    refresh-expiration: 604800000  # 7 days in milliseconds
+  
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:5174,http://localhost:3000}
+  
+  ai:
+    enabled: true
+    match-limit: 10  # Number of matches to analyze with AI (reduces token usage)
+    provider: groq
+    groq:
+      # IMPORTANT: Set GROQ_API_KEY environment variable for production
+      api-key: ${GROQ_API_KEY:}
+      api-url: https://api.groq.com/openai/v1/chat/completions
+      model: llama-3.3-70b-versatile
+      max-tokens: 250  # Reduced from 500 for efficiency
+      temperature: 0.7
+      # SSL verification - only skip in development when behind corporate proxy
+      skip-ssl-verification: ${SKIP_SSL_VERIFICATION:false}
+    cache:
+      ttl-minutes: 1440  # 24 hours
+
+logging:
+  level:
+    com.studymatch: DEBUG
+    org.springframework.security: INFO
+
